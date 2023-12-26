@@ -1,6 +1,6 @@
 package com.kermitemperor.curiosbackslot.render;
 
-import com.kermitemperor.curiosbackslot.CuriosBackSlot;
+import com.kermitemperor.curiosbackslot.util.CuriosBackSlotHandler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
@@ -16,9 +16,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
-import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
 @OnlyIn(Dist.CLIENT)
 public class BackWeaponRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
@@ -39,12 +36,7 @@ public class BackWeaponRenderer extends RenderLayer<AbstractClientPlayer, Player
 
         Player player = (Player) livingEntity;
 
-        ICuriosItemHandler curiosItemHandler = CuriosApi.getCuriosHelper().getCuriosHandler(player).orElseThrow(NullPointerException::new);
-        ICurioStacksHandler curioStacksHandler = curiosItemHandler.getStacksHandler(CuriosBackSlot.SLOT_ID).orElseThrow();
-        ItemStack stack = curioStacksHandler.getStacks().getStackInSlot(0);
-
-
-
+        ItemStack stack = CuriosBackSlotHandler.getStackInSlotClient();
 
         matrixStack.pushPose();
 

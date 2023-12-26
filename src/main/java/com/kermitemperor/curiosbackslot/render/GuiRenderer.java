@@ -1,7 +1,7 @@
 package com.kermitemperor.curiosbackslot.render;
 
-import com.kermitemperor.curiosbackslot.CuriosBackSlot;
 import com.kermitemperor.curiosbackslot.config.ClientConfig;
+import com.kermitemperor.curiosbackslot.util.CuriosBackSlotHandler;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -13,9 +13,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.client.gui.IIngameOverlay;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
-import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiRenderer implements IIngameOverlay{
@@ -28,10 +25,7 @@ public class GuiRenderer implements IIngameOverlay{
     public void render(ForgeIngameGui gui, PoseStack poseStack, float partialTick, int width, int height) {
         if (!(ClientConfig.SHOW.get())) return;
 
-        // Wouldn't it be funny if I did a one line here for the ItemStack ?
-        ICuriosItemHandler curiosItemHandler = CuriosApi.getCuriosHelper().getCuriosHandler(mc.player).orElseThrow(NullPointerException::new);
-        ICurioStacksHandler curioStacksHandler = curiosItemHandler.getStacksHandler(CuriosBackSlot.SLOT_ID).orElseThrow();
-        ItemStack stack = curioStacksHandler.getStacks().getStackInSlot(0);
+        ItemStack stack = CuriosBackSlotHandler.getStackInSlotClient();
 
         //noinspection DataFlowIssue
         if (mc.options.hideGui || mc.gameMode.getPlayerMode() == GameType.SPECTATOR || stack.isEmpty())

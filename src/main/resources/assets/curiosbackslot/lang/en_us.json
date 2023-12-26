@@ -1,5 +1,5 @@
 {
-  "curios.identifier.back_weapon": "Back Weapon (Press V to quickswap)",
-  "key.category.back_weapon.main": "Curios Back Slot Keys",
-  "key.back_weapon.switch": "Quickswap"
+  "curios.identifier.back_weapon": "Back Weapon §8§o(Press V to quickswap)",
+  "key.category.curiosbackslot.main": "Curios Back Slot Keys",
+  "key.curiosbackslot.switch": "Quickswap"
 }

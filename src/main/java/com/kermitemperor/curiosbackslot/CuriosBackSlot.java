@@ -2,12 +2,17 @@ package com.kermitemperor.curiosbackslot;
 
 import com.kermitemperor.curiosbackslot.client.KeyBinding;
 import com.kermitemperor.curiosbackslot.config.ClientConfig;
+import com.kermitemperor.curiosbackslot.network.PacketChannel;
+import com.kermitemperor.curiosbackslot.network.packet.SwitchPacket;
 import com.kermitemperor.curiosbackslot.render.GuiRenderer;
+import com.kermitemperor.curiosbackslot.util.CuriosBackSlotHandler;
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.gui.OverlayRegistry;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -28,9 +33,9 @@ import top.theillusivec4.curios.api.event.CurioEquipEvent;
 public class CuriosBackSlot {
 
     public static final String MOD_ID = "curiosbackslot";
-    public static final String SLOT_ID = "back_weapon";
 
     public static final Logger LOGGER = LogUtils.getLogger();
+
 
     public CuriosBackSlot() {
 
@@ -46,18 +51,19 @@ public class CuriosBackSlot {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
+        PacketChannel.register();
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
-        OverlayRegistry.registerOverlayTop(SLOT_ID, new GuiRenderer());
+        OverlayRegistry.registerOverlayTop(CuriosBackSlotHandler.SLOT_ID, new GuiRenderer());
         ClientRegistry.registerKeyBinding(KeyBinding.SWITCHING_KEY);
     }
 
     private void enqueue(final InterModEnqueueEvent evt) {
         InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE,
                 () -> new SlotTypeMessage
-                        .Builder(SLOT_ID)
-                        .icon(new ResourceLocation(CuriosApi.MODID,"slot/empty_"+SLOT_ID+"_slot"))
+                        .Builder(CuriosBackSlotHandler.SLOT_ID)
+                        .icon(new ResourceLocation(CuriosApi.MODID,"slot/empty_"+CuriosBackSlotHandler.SLOT_ID+"_slot"))
                         .priority(1)
                         .size(1)
                         .build()
@@ -66,8 +72,16 @@ public class CuriosBackSlot {
 
     @SubscribeEvent
     public void onEquip(CurioEquipEvent event) {
-        if (event.getSlotContext().identifier().equals(SLOT_ID)) {
+        if (event.getSlotContext().identifier().equals(CuriosBackSlotHandler.SLOT_ID)) {
             event.setResult(Event.Result.ALLOW);
+        }
+    }
+
+    @SubscribeEvent
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+        final Minecraft mc = Minecraft.getInstance();
+        if (KeyBinding.SWITCHING_KEY.consumeClick() && mc.player != null) {
+            PacketChannel.sendToServer(new SwitchPacket());
         }
     }
 
