@@ -15,7 +15,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import top.theillusivec4.curios.common.inventory.CurioSlot;
 
-@Mixin(CurioSlot.class)
+@OnlyIn(Dist.CLIENT)
+@Mixin(value = CurioSlot.class, remap = false)
 public abstract class CurioSlotMixin extends SlotItemHandler {
     @Shadow @Final private String identifier;
 
@@ -24,7 +25,7 @@ public abstract class CurioSlotMixin extends SlotItemHandler {
     }
 
     @OnlyIn(Dist.CLIENT)
-    @Inject(method = "getSlotName", at=@At("TAIL"), cancellable = true, remap = false)
+    @Inject(method = "getSlotName", at=@At("TAIL"), cancellable = true)
     public void onGetSlotName(CallbackInfoReturnable<String> info) {
         if (this.identifier.equals(CuriosBackSlotHandler.SLOT_ID)) {
             info.setReturnValue(I18n.get("curios.identifier." + this.identifier, KeyBinding.SWITCHING_KEY.getKey().getDisplayName().getString().toUpperCase()));

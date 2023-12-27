@@ -9,6 +9,8 @@ import com.kermitemperor.curiosbackslot.util.CuriosBackSlotHandler;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.gui.OverlayRegistry;
 import net.minecraftforge.common.MinecraftForge;
@@ -34,6 +36,7 @@ public class CuriosBackSlot {
 
     public static final String MOD_ID = "curiosbackslot";
 
+    @SuppressWarnings("unused")
     public static final Logger LOGGER = LogUtils.getLogger();
 
 
@@ -76,7 +79,7 @@ public class CuriosBackSlot {
             event.setResult(Event.Result.ALLOW);
         }
     }
-
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         final Minecraft mc = Minecraft.getInstance();

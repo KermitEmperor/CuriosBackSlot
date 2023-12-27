@@ -31,6 +31,9 @@ public class SwitchPacket {
 
             if (player != null) {
                 ItemStack handStack = player.getItemBySlot(EquipmentSlot.MAINHAND);
+                /*TODO fix this
+                java.lang.RuntimeException: Attempted to load class net/minecraft/client/player/LocalPlayer for invalid dist DEDICATED_SERVER
+                */
                 ItemStack backStack = CuriosBackSlotHandler.getStackInSlot(player);
                 if (backStack.isEmpty() && handStack.isEmpty()) return;
                 player.setItemSlot(EquipmentSlot.MAINHAND, backStack);

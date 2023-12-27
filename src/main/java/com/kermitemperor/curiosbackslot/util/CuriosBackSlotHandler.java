@@ -3,6 +3,8 @@ package com.kermitemperor.curiosbackslot.util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
@@ -17,6 +19,7 @@ public class CuriosBackSlotHandler {
         return curiosItemHandler.getStacksHandler(SLOT_ID).orElseThrow();
     }
 
+    @OnlyIn(Dist.CLIENT)
     public static ItemStack getStackInSlotClient() {
         ICurioStacksHandler curioStacksHandler = getCurioStackHandler(mc.player);
         return curioStacksHandler.getStacks().getStackInSlot(0);
