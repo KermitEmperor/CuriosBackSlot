@@ -12,8 +12,9 @@ import net.minecraft.client.renderer.entity.*;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -37,13 +38,14 @@ public class BackWeaponRenderer extends RenderLayer<AbstractClientPlayer, Player
         Player player = (Player) livingEntity;
 
         ItemStack stack = CuriosBackSlotHandler.getStackInSlotClient();
+        Item item = stack.getItem();
 
         matrixStack.pushPose();
 
         PlayerModel<AbstractClientPlayer> playerModel = pRenderer.getModel();
         playerModel.body.translateAndRotate(matrixStack);
         matrixStack.scale(1,1,1);
-        matrixStack.translate(0, 0.25d, 0.16d);
+        matrixStack.translate(0, 0.35d, 0.16d);
         matrixStack.mulPose(Vector3f.ZN.rotationDegrees(90f));
 
 
@@ -52,8 +54,35 @@ public class BackWeaponRenderer extends RenderLayer<AbstractClientPlayer, Player
 
         //TODO per player customiability (Location, Scale and TransformType modification using GUI, store in capabilities probably)
 
-        itemRenderer.render(stack, ItemTransforms.TransformType.FIXED, true, matrixStack, bufferSource, packedLight, OverlayTexture.NO_OVERLAY, model);
+        if (item instanceof TridentItem) {
+            //matrixStack.mulPose(Vector3f.XN.rotationDegrees(90f));
+            matrixStack.mulPose(Vector3f.ZN.rotationDegrees(135f));
+            matrixStack.translate(0.55d, 0.85d, 0.39d);
+            matrixStack.scale(1.8f, 1.8f, 1.8f);
+            if (hasArmor(livingEntity)) matrixStack.translate(0, 0 , 0.03d);
+            itemRenderer.render(stack, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, true, matrixStack, bufferSource, packedLight, OverlayTexture.NO_OVERLAY, model);
+        } else if (item instanceof ShieldItem) {
+            matrixStack.mulPose(Vector3f.ZN.rotationDegrees(90f));
+            matrixStack.mulPose(Vector3f.YP.rotationDegrees(90f));
+            matrixStack.translate(0.1, 0, 0.49);
+            matrixStack.scale(0.65f, 0.65f, 0.65f);
+            if (hasArmor(livingEntity)) matrixStack.translate(-0.01d, 0, 0);
+            itemRenderer.render(stack, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, true, matrixStack, bufferSource, packedLight, OverlayTexture.NO_OVERLAY, model);
+        } else if (item instanceof BlockItem){
+            matrixStack.mulPose(Vector3f.ZP.rotationDegrees(90f));
+            matrixStack.mulPose(Vector3f.XN.rotationDegrees(180f));
+            matrixStack.translate(0,0.15,-0.2);
+            if (hasArmor(livingEntity)) matrixStack.translate(0, 0 , -0.07d);
+            itemRenderer.render(stack, ItemTransforms.TransformType.FIXED, true, matrixStack, bufferSource, packedLight, OverlayTexture.NO_OVERLAY, model);
+        } else {
+            if (hasArmor(livingEntity)) matrixStack.translate(0, 0 , 0.07d);
+            itemRenderer.render(stack, ItemTransforms.TransformType.FIXED, true, matrixStack, bufferSource, packedLight, OverlayTexture.NO_OVERLAY, model);
+        }
 
         matrixStack.popPose();
+    }
+
+    private boolean hasArmor(AbstractClientPlayer livingEntity) {
+        return livingEntity.hasItemInSlot(EquipmentSlot.CHEST);
     }
 }
