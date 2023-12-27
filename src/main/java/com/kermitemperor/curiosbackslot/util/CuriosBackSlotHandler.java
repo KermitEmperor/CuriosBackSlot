@@ -22,6 +22,10 @@ public class CuriosBackSlotHandler {
         return curioStacksHandler.getStacks().getStackInSlot(0);
     }
 
+    public static boolean renderItemInSlot(Player player) {
+        return getCurioStackHandler(player).getRenders().get(0);
+    }
+
     public static ItemStack getStackInSlot(Player player) {
         return getCurioStackHandler(player).getStacks().getStackInSlot(0);
     }
