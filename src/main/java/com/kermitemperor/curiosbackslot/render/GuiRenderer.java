@@ -15,7 +15,7 @@ import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.client.gui.IIngameOverlay;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiRenderer implements IIngameOverlay{
+public class GuiRenderer implements IIngameOverlay {
 
     final Minecraft mc = Minecraft.getInstance();
 
@@ -43,6 +43,7 @@ public class GuiRenderer implements IIngameOverlay{
         gui.blit(poseStack, xPos + 29, yPos - 23, 24, 22, 29, 24);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
+
         mc.getItemRenderer().renderGuiItem(stack,xPos + 32, yPos - 19);
     }
 }
