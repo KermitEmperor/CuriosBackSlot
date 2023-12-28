@@ -30,7 +30,7 @@ public class CuriosBackSlotHandler {
     }
 
     //FOR RENDER USE ONLY
-    public static ItemStack getItemInSlot(LivingEntity player) {
+    public static ItemStack getStackInSlot(LivingEntity player) {
         return getCurioStackHandler(player).getStacks().getStackInSlot(0);
     }
 
