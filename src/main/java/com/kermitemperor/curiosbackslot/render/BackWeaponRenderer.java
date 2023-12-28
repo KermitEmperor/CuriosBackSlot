@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -35,11 +34,10 @@ public class BackWeaponRenderer extends RenderLayer<AbstractClientPlayer, Player
     public void render(PoseStack matrixStack, MultiBufferSource bufferSource, int packedLight, AbstractClientPlayer livingEntity, float pLimbSwing, float pLimbSwingAmount, float pPartialTick, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         Minecraft mc = Minecraft.getInstance();
 
-        Player player = (Player) livingEntity;
 
-        if (!(CuriosBackSlotHandler.renderItemInSlot(player))) return;
+        if (!(CuriosBackSlotHandler.renderItemInSlot(livingEntity))) return;
 
-        ItemStack stack = CuriosBackSlotHandler.getStackInSlotClient();
+        ItemStack stack = CuriosBackSlotHandler.getItemInSlot(livingEntity);
         Item item = stack.getItem();
 
         matrixStack.pushPose();

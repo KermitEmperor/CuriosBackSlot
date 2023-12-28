@@ -29,7 +29,13 @@ public class CuriosBackSlotHandler {
         return getCurioStackHandler(player).getRenders().get(0);
     }
 
+    //FOR RENDER USE ONLY
+    public static ItemStack getItemInSlot(LivingEntity player) {
+        return getCurioStackHandler(player).getStacks().getStackInSlot(0);
+    }
+
     //Must make an instance of this on serverside, otherwise null pointer exception will happen
+    //Using CuriosBackSlotHandler on a server packet enqueue will produce errors
     public static class ServerCuriosBackSlotHandler {
 
         private final ICurioStacksHandler curioStacksHandler;
