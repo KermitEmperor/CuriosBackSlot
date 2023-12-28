@@ -13,7 +13,7 @@ public class ClientConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> SHOW;
 
     static {
-        BUILDER.push("Configs for Vampirism Covered Armor");
+        BUILDER.push("Configs for Curios Back Weapon Slot");
 
 
         SHOW = BUILDER
