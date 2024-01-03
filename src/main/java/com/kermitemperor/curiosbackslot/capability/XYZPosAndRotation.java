@@ -2,6 +2,9 @@ package com.kermitemperor.curiosbackslot.capability;
 
 import net.minecraft.nbt.CompoundTag;
 
+
+import static com.kermitemperor.curiosbackslot.CuriosBackSlot.LOGGER;
+
 public class XYZPosAndRotation {
 
     //TODO fix this being null
@@ -47,6 +50,7 @@ public class XYZPosAndRotation {
     }
 
     public void load(CompoundTag nbt) {
+        LOGGER.info(String.valueOf(nbt.getCompound("XYZPosAndRotation")));
         this.XYZPosAndRotationDATA = nbt.getCompound("XYZPosAndRotation");
     }
 

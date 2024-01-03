@@ -20,6 +20,7 @@ import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.gui.OverlayRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -114,10 +115,18 @@ public class CuriosBackSlot {
 
     @SubscribeEvent
     public void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof Player) {
-            if (!(event.getObject().getCapability(XYZPosAndRotationProvider.PLAYER_BACK_WEAPON_XYZ).isPresent())) {
+        //TODO ask for help, event firing twice and the second time the saved NBT is not getting loaded
+        if (event.getObject() instanceof Player player) {
+
+            LazyOptional<XYZPosAndRotation> existingCapability = player.getCapability(XYZPosAndRotationProvider.PLAYER_BACK_WEAPON_XYZ);
+
+            final XYZPosAndRotationProvider provider = new XYZPosAndRotationProvider();
+
+            if (!existingCapability.isPresent()) {
                 LOGGER.info("attached");
-                event.addCapability(new ResourceLocation(MOD_ID, "properties"), new XYZPosAndRotationProvider());
+                event.addCapability(new ResourceLocation(MOD_ID, "properties"), provider);
+            } else {
+                LOGGER.info("XYZPosAndRotation capability already present");
             }
         }
     }

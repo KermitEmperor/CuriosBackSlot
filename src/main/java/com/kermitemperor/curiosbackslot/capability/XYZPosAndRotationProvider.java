@@ -45,7 +45,7 @@ public class XYZPosAndRotationProvider implements ICapabilityProvider, INBTSeria
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag nbt = new CompoundTag();
-        createPlayerXYZPosAndRotationDATA().save(nbt);
+        XYZPosAndRotationDATA.save(nbt);
         return nbt;
     }
 
