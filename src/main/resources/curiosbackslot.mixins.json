@@ -7,8 +7,8 @@
   "mixins": [
   ],
   "client": [
-    "PlayerRendererMixin",
-    "CurioSlotMixin"
+    "CurioSlotMixin",
+    "PlayerRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

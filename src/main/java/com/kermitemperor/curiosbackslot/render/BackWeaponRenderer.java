@@ -1,5 +1,6 @@
 package com.kermitemperor.curiosbackslot.render;
 
+import com.kermitemperor.curiosbackslot.capability.XYZPosAndRotationProvider;
 import com.kermitemperor.curiosbackslot.util.CuriosBackSlotHandler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
@@ -16,6 +17,8 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import static com.kermitemperor.curiosbackslot.CuriosBackSlot.LOGGER;
 
 @OnlyIn(Dist.CLIENT)
 public class BackWeaponRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
@@ -37,10 +40,12 @@ public class BackWeaponRenderer extends RenderLayer<AbstractClientPlayer, Player
 
         if (!(CuriosBackSlotHandler.renderItemInSlot(livingEntity))) return;
 
+
         ItemStack stack = CuriosBackSlotHandler.getStackInSlot(livingEntity);
         Item item = stack.getItem();
 
         matrixStack.pushPose();
+
 
         PlayerModel<AbstractClientPlayer> playerModel = pRenderer.getModel();
         playerModel.body.translateAndRotate(matrixStack);
@@ -52,7 +57,13 @@ public class BackWeaponRenderer extends RenderLayer<AbstractClientPlayer, Player
         ItemRenderer itemRenderer = mc.getItemRenderer();
         BakedModel model = itemRenderer.getItemModelShaper().getItemModel(stack);
 
-        //TODO per player customiability (Location, Scale and TransformType modification using GUI, store in capabilities probably)
+        //TODO per player combustibility (Location, Scale and TransformType modification using GUI, store in capabilities probably)
+
+        livingEntity.getCapability(XYZPosAndRotationProvider.PLAYER_BACK_WEAPON_XYZ).ifPresent(xyzPosAndRotation -> {
+            LOGGER.info(livingEntity.getName().getContents() + " " + xyzPosAndRotation.getX() + " " + xyzPosAndRotation.getY());
+            matrixStack.translate(xyzPosAndRotation.getX(), xyzPosAndRotation.getY(), xyzPosAndRotation.getZ());
+        });
+
 
         if (item instanceof TridentItem) {
             //matrixStack.mulPose(Vector3f.XN.rotationDegrees(90f));

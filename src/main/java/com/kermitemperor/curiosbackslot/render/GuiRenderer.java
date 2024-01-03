@@ -23,6 +23,7 @@ public class GuiRenderer implements IIngameOverlay {
 
     @Override
     public void render(ForgeIngameGui gui, PoseStack poseStack, float partialTick, int width, int height) {
+        if (mc.player == null) return;
         if (!(ClientConfig.SHOW.get())) return;
 
         ItemStack stack = CuriosBackSlotHandler.getStackInSlotClient();

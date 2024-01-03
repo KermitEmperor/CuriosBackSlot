@@ -1,5 +1,8 @@
 package com.kermitemperor.curiosbackslot;
 
+import com.kermitemperor.curiosbackslot.capability.XYZPosAndRotation;
+import com.kermitemperor.curiosbackslot.capability.XYZPosAndRotationProvider;
+import com.kermitemperor.curiosbackslot.client.BackWeaponConfigurationScreen;
 import com.kermitemperor.curiosbackslot.client.KeyBinding;
 import com.kermitemperor.curiosbackslot.config.ClientConfig;
 import com.kermitemperor.curiosbackslot.network.PacketChannel;
@@ -9,12 +12,17 @@ import com.kermitemperor.curiosbackslot.util.CuriosBackSlotHandler;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.gui.OverlayRegistry;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -46,6 +54,7 @@ public class CuriosBackSlot {
         ModEventBus.addListener(this::setup);
         ModEventBus.addListener(this::enqueue);
         ModEventBus.addListener(this::clientSetup);
+        ModEventBus.addListener(this::onRegisterCapabilities);
 
         IEventBus ForgeEventBus = MinecraftForge.EVENT_BUS;
         ForgeEventBus.register(this);
@@ -60,6 +69,8 @@ public class CuriosBackSlot {
     private void clientSetup(final FMLClientSetupEvent event) {
         OverlayRegistry.registerOverlayTop(CuriosBackSlotHandler.SLOT_ID, new GuiRenderer());
         ClientRegistry.registerKeyBinding(KeyBinding.SWITCHING_KEY);
+        ClientRegistry.registerKeyBinding(KeyBinding.SWITCHING_KEY);
+
     }
 
     private void enqueue(final InterModEnqueueEvent evt) {
@@ -73,6 +84,11 @@ public class CuriosBackSlot {
         );
     }
 
+    public void onRegisterCapabilities(final RegisterCapabilitiesEvent event) {
+        LOGGER.info("registered");
+        event.register(XYZPosAndRotation.class);
+    }
+
     @SubscribeEvent
     public void onEquip(CurioEquipEvent event) {
         if (event.getSlotContext().identifier().equals(CuriosBackSlotHandler.SLOT_ID)) {
@@ -83,8 +99,47 @@ public class CuriosBackSlot {
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         final Minecraft mc = Minecraft.getInstance();
-        if (KeyBinding.SWITCHING_KEY.consumeClick() && mc.player != null) {
+        if (mc.player == null) return;
+
+        if (KeyBinding.SWITCHING_KEY.consumeClick()) {
             PacketChannel.sendToServer(new SwitchPacket());
+        } else if (KeyBinding.XYZ_KEY.consumeClick()) {
+            Minecraft.getInstance().pushGuiLayer(new BackWeaponConfigurationScreen());
+        }
+
+        if (mc.screen instanceof BackWeaponConfigurationScreen) {
+            mc.mouseHandler.releaseMouse();
+        }
+    }
+
+    @SubscribeEvent
+    public void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
+        if (event.getObject() instanceof Player) {
+            if (!(event.getObject().getCapability(XYZPosAndRotationProvider.PLAYER_BACK_WEAPON_XYZ).isPresent())) {
+                LOGGER.info("attached");
+                event.addCapability(new ResourceLocation(MOD_ID, "properties"), new XYZPosAndRotationProvider());
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerCloned(PlayerEvent.Clone event) {
+        if(event.isWasDeath()) {
+            event.getOriginal().getCapability(XYZPosAndRotationProvider.PLAYER_BACK_WEAPON_XYZ).ifPresent(oldStore -> {
+                event.getOriginal().getCapability(XYZPosAndRotationProvider.PLAYER_BACK_WEAPON_XYZ).ifPresent(newStore -> {
+                    newStore.copyFrom(oldStore);
+                });
+            });
+        }
+    }
+
+
+    @SubscribeEvent
+    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if(event.side != null) {
+            event.player.getCapability(XYZPosAndRotationProvider.PLAYER_BACK_WEAPON_XYZ).ifPresent(xyzPosAndRotation -> {
+                    //LOGGER.info(String.valueOf(xyzPosAndRotation.getX()) + event.side);
+            });
         }
     }
 
