@@ -6,6 +6,7 @@ import com.kermitemperor.curiosbackslot.client.BackWeaponConfigurationScreen;
 import com.kermitemperor.curiosbackslot.client.KeyBinding;
 import com.kermitemperor.curiosbackslot.config.ClientConfig;
 import com.kermitemperor.curiosbackslot.network.PacketChannel;
+import com.kermitemperor.curiosbackslot.network.packet.ResyncWithMePacket;
 import com.kermitemperor.curiosbackslot.network.packet.SwitchPacket;
 import com.kermitemperor.curiosbackslot.render.GuiRenderer;
 import com.kermitemperor.curiosbackslot.util.CuriosBackSlotHandler;
@@ -115,7 +116,6 @@ public class CuriosBackSlot {
 
     @SubscribeEvent
     public void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
-        //TODO ask for help, event firing twice and the second time the saved NBT is not getting loaded
         if (event.getObject() instanceof Player player) {
 
             LazyOptional<XYZPosAndRotation> existingCapability = player.getCapability(XYZPosAndRotationProvider.PLAYER_BACK_WEAPON_XYZ);
@@ -123,14 +123,26 @@ public class CuriosBackSlot {
             final XYZPosAndRotationProvider provider = new XYZPosAndRotationProvider();
 
             if (!existingCapability.isPresent()) {
-                LOGGER.info("attached");
+                LOGGER.info("attached, is Client: " + player.level.isClientSide());
                 event.addCapability(new ResourceLocation(MOD_ID, "properties"), provider);
+
+                //This event is called twice, one on Server and on Client, we have to ask the server to
+                //send a packet about the player's capability
+                //and to set it in our side
+
+                if (player.level.isClientSide) {
+
+                    //We have to use the execute method, otherwise the PacketChannel will be called too soon
+
+                    Minecraft.getInstance().execute(() -> PacketChannel.sendToServer(new ResyncWithMePacket()));
+                }
             } else {
                 LOGGER.info("XYZPosAndRotation capability already present");
             }
         }
     }
 
+    @SuppressWarnings("CodeBlock2Expr")
     @SubscribeEvent
     public void onPlayerCloned(PlayerEvent.Clone event) {
         if(event.isWasDeath()) {

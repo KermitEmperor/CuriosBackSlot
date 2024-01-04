@@ -20,6 +20,9 @@ public class BackWeaponConfigurationScreen extends Screen {
     private double x;
     private double y;
 
+    //TODO make a usable stylish screen
+    //TODO show what are the current values
+
     @Override
     public void init() {
         this.addRenderableWidget(new Button(100, 100 ,18 ,20, new TextComponent("1+"), (pButton) -> {

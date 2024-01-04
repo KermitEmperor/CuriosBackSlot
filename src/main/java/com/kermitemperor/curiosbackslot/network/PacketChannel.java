@@ -1,9 +1,7 @@
 package com.kermitemperor.curiosbackslot.network;
 
 import com.kermitemperor.curiosbackslot.CuriosBackSlot;
-import com.kermitemperor.curiosbackslot.network.packet.RenderInfoCapabilityPacket;
-import com.kermitemperor.curiosbackslot.network.packet.SwitchPacket;
-import com.kermitemperor.curiosbackslot.network.packet.SyncRenderInfoCapabilityPacket;
+import com.kermitemperor.curiosbackslot.network.packet.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
@@ -44,6 +42,12 @@ public class PacketChannel {
                 .encoder(SyncRenderInfoCapabilityPacket::encode)
                 .decoder(SyncRenderInfoCapabilityPacket::new)
                 .consumer(SyncRenderInfoCapabilityPacket::handle)
+                .add();
+
+        net.messageBuilder(ResyncWithMePacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .encoder(ResyncWithMePacket::encode)
+                .decoder(ResyncWithMePacket::new)
+                .consumer(ResyncWithMePacket::handle)
                 .add();
     }
 

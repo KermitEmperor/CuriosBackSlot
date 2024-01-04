@@ -6,12 +6,14 @@ import net.minecraft.nbt.CompoundTag;
 import static com.kermitemperor.curiosbackslot.CuriosBackSlot.LOGGER;
 
 public class XYZPosAndRotation {
-
-    //TODO fix this being null
     private CompoundTag XYZPosAndRotationDATA;
 
+
+    public void set(CompoundTag tag) {
+        this.XYZPosAndRotationDATA = tag;
+    }
+
     public void setXYZPosAndRotationDATA(double x, double y, double z, float xrot, float yrot, float zrot) {
-        this.XYZPosAndRotationDATA = new CompoundTag();
 
 
 
@@ -23,22 +25,6 @@ public class XYZPosAndRotation {
         this.XYZPosAndRotationDATA.putFloat("Zrot", zrot);
 
 
-    }
-
-    public void addXYZPosAndRotationDATA(double x, double y, double z, float xrot, float yrot, float zrot) {
-
-        addX(x);
-        addY(y);
-        addZ(z);
-        addXrot(xrot);
-        addYrot(yrot);
-        addZrot(zrot);
-
-
-    }
-
-    public CompoundTag getXYZPosAndRotationDATA() {
-        return this.XYZPosAndRotationDATA;
     }
 
     public void copyFrom(XYZPosAndRotation source) {
@@ -54,55 +40,6 @@ public class XYZPosAndRotation {
         this.XYZPosAndRotationDATA = nbt.getCompound("XYZPosAndRotation");
     }
 
-
-
-    public void addX(double x) {
-        this.XYZPosAndRotationDATA.putDouble("X", getX() + x);
-    }
-
-    public void addY(double y) {
-        this.XYZPosAndRotationDATA.putDouble("Y", getY() + y);
-    }
-
-    public void addZ(double z) {
-        this.XYZPosAndRotationDATA.putDouble("Z", getZ() + z);
-    }
-
-    public void addXrot(float xrot) {
-        this.XYZPosAndRotationDATA.putFloat("Xrot", getXrot() + xrot);
-    }
-
-    public void addYrot(float yrot) {
-        this.XYZPosAndRotationDATA.putFloat("Yrot", getYrot() + yrot);
-    }
-
-    public void addZrot(float zrot) {
-        this.XYZPosAndRotationDATA.putFloat("Zrot", getZrot() + zrot);
-    }
-
-    public void setX(double x) {
-        this.XYZPosAndRotationDATA.putDouble("X", x);
-    }
-
-    public void setY(double y) {
-        this.XYZPosAndRotationDATA.putDouble("Y", y);
-    }
-
-    public void setZ(double z) {
-        this.XYZPosAndRotationDATA.putDouble("Z", z);
-    }
-
-    public void setXrot(float xrot) {
-        this.XYZPosAndRotationDATA.putFloat("Xrot", xrot);
-    }
-
-    public void setYrot(float yrot) {
-        this.XYZPosAndRotationDATA.putFloat("Yrot", yrot);
-    }
-
-    public void setZrot(float zrot) {
-        this.XYZPosAndRotationDATA.putFloat("Zrot", zrot);
-    }
 
     public double getX() {
         return this.XYZPosAndRotationDATA.getDouble("X");

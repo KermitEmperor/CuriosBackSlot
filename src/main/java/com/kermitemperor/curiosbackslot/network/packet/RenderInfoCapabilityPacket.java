@@ -67,9 +67,7 @@ public class RenderInfoCapabilityPacket {
                 player.getCapability(XYZPosAndRotationProvider.PLAYER_BACK_WEAPON_XYZ).ifPresent(xyzPosAndRotation -> {
 
 
-                    //TODO ADD received data to capability, send said capability's NEW state to client and SET it on that side
-
-                    xyzPosAndRotation.addXYZPosAndRotationDATA(X, Y, Z, Xrot, Yrot, Zrot);
+                    xyzPosAndRotation.setXYZPosAndRotationDATA(X, Y, Z, Xrot, Yrot, Zrot);
                     LOGGER.info("Server:"+ " " + X+ " " + Y+ " " + Z+ " " + Xrot+ " " + Yrot+ " " + Zrot);
                     PacketChannel.sendToAllClients(new SyncRenderInfoCapabilityPacket(player.getUUID(),X, Y, Z, Xrot, Yrot, Zrot));
                 });

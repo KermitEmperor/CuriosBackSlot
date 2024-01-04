@@ -57,8 +57,6 @@ public class BackWeaponRenderer extends RenderLayer<AbstractClientPlayer, Player
         ItemRenderer itemRenderer = mc.getItemRenderer();
         BakedModel model = itemRenderer.getItemModelShaper().getItemModel(stack);
 
-        //TODO per player combustibility (Location, Scale and TransformType modification using GUI, store in capabilities probably)
-
         livingEntity.getCapability(XYZPosAndRotationProvider.PLAYER_BACK_WEAPON_XYZ).ifPresent(xyzPosAndRotation -> {
             LOGGER.info(livingEntity.getName().getContents() + " " + xyzPosAndRotation.getX() + " " + xyzPosAndRotation.getY());
             matrixStack.translate(xyzPosAndRotation.getX(), xyzPosAndRotation.getY(), xyzPosAndRotation.getZ());
