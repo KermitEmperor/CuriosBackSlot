@@ -13,13 +13,13 @@ public class XYZPosAndRotation {
         this.XYZPosAndRotationDATA = tag;
     }
 
-    public void setXYZPosAndRotationDATA(double x, double y, double z, float xrot, float yrot, float zrot) {
+    public void setXYZPosAndRotationDATA(boolean third_p_render, float x, float y, float z, float xrot, float yrot, float zrot) {
 
 
-
-        this.XYZPosAndRotationDATA.putDouble("X", x);
-        this.XYZPosAndRotationDATA.putDouble("Y", y);
-        this.XYZPosAndRotationDATA.putDouble("Z", z);
+        this.XYZPosAndRotationDATA.putBoolean("ThirdPersonRender", third_p_render);
+        this.XYZPosAndRotationDATA.putFloat("X", x);
+        this.XYZPosAndRotationDATA.putFloat("Y", y);
+        this.XYZPosAndRotationDATA.putFloat("Z", z);
         this.XYZPosAndRotationDATA.putFloat("Xrot", xrot);
         this.XYZPosAndRotationDATA.putFloat("Yrot", yrot);
         this.XYZPosAndRotationDATA.putFloat("Zrot", zrot);
@@ -41,16 +41,20 @@ public class XYZPosAndRotation {
     }
 
 
-    public double getX() {
-        return this.XYZPosAndRotationDATA.getDouble("X");
+    public boolean isThirdPersonRender() {
+        return this.XYZPosAndRotationDATA.getBoolean("ThirdPersonRender");
     }
 
-    public double getY() {
-        return this.XYZPosAndRotationDATA.getDouble("Y");
+    public float getX() {
+        return this.XYZPosAndRotationDATA.getFloat("X");
     }
 
-    public double getZ() {
-        return this.XYZPosAndRotationDATA.getDouble("Z");
+    public float getY() {
+        return this.XYZPosAndRotationDATA.getFloat("Y");
+    }
+
+    public float getZ() {
+        return this.XYZPosAndRotationDATA.getFloat("Z");
     }
 
     public float getXrot() {

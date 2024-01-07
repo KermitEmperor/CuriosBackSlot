@@ -1,5 +1,6 @@
 package com.kermitemperor.curiosbackslot.client;
 
+import com.kermitemperor.curiosbackslot.capability.XYZPosAndRotationProvider;
 import com.kermitemperor.curiosbackslot.network.PacketChannel;
 import com.kermitemperor.curiosbackslot.network.packet.RenderInfoCapabilityPacket;
 import com.mojang.blaze3d.platform.Lighting;
@@ -8,33 +9,55 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
+
+import java.awt.*;
 
 import static com.kermitemperor.curiosbackslot.CuriosBackSlot.LOGGER;
 
 public class BackWeaponConfigurationScreen extends Screen {
     public BackWeaponConfigurationScreen() {
-        super(new TextComponent("yeah"));
+        super(new TranslatableComponent("backweaponconfigurationscreen.title"));
     }
 
 
+    private boolean third_p_render;
+    private float x;
+    private float y;
+    private float z;
+    private float xrot;
+    private float yrot;
+    private float zrot;
 
-    private double x;
-    private double y;
 
     //TODO make a usable stylish screen
     //TODO show what are the current values
 
     @Override
     public void init() {
+        LivingEntity player = Minecraft.getInstance().player;
+        if (player != null) {
+            player.getCapability(XYZPosAndRotationProvider.PLAYER_BACK_WEAPON_XYZ).ifPresent(xyzPosAndRotation -> {
+                this.x = xyzPosAndRotation.getX();
+                this.y = xyzPosAndRotation.getY();
+                this.z = xyzPosAndRotation.getZ();
+
+                this.xrot = xyzPosAndRotation.getXrot();
+                this.yrot = xyzPosAndRotation.getYrot();
+                this.zrot = xyzPosAndRotation.getZrot();
+            });
+        }
+
+
+        /*
         this.addRenderableWidget(new Button(100, 100 ,18 ,20, new TextComponent("1+"), (pButton) -> {
             LOGGER.info("pressed");
             this.x += 1;
@@ -55,8 +78,12 @@ public class BackWeaponConfigurationScreen extends Screen {
 
         this.addRenderableWidget(new Button(100, 144 ,18 ,20, new TextComponent("Save"), (pButton) -> {
             LOGGER.info("saving");
-            PacketChannel.sendToServer(new RenderInfoCapabilityPacket(x, y, 0, 0, 0, 0));
-        }));
+            save();
+        }));*/
+    }
+
+    private void save() {
+        PacketChannel.sendToServer(new RenderInfoCapabilityPacket(this.third_p_render,this.x, this.y, this.z, this.xrot, this.yrot, this.zrot));
     }
 
     @Override
@@ -66,6 +93,8 @@ public class BackWeaponConfigurationScreen extends Screen {
         if (player != null) {
             renderEntity(this.width / 2, this.height / 2 + 25, 30, pMouseX - (float) this.width / 2, (float) (this.height / 2 - 25) - pMouseY, player);
         }
+        drawCenteredString(pMatrixStack, this.font, this.title, this.width / 2, 15, 16777215);
+        drawCenteredString(pMatrixStack, this.font, new TextComponent("NOT YET IMPLEMENTED"), this.width / 2, 30, 16711680);
         super.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
     }
 
@@ -136,8 +165,9 @@ public class BackWeaponConfigurationScreen extends Screen {
     @Override
     public void onClose() {
         LOGGER.info("saving");
-        PacketChannel.sendToServer(new RenderInfoCapabilityPacket(x, y, 0, 0, 0, 0));
+        save();
         super.onClose();
     }
+
 
 }

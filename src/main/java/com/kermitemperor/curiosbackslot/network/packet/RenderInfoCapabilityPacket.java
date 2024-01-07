@@ -14,16 +14,18 @@ import static com.kermitemperor.curiosbackslot.CuriosBackSlot.LOGGER;
 public class RenderInfoCapabilityPacket {
 
 
-    protected double x;
-    protected double y;
-    protected double z;
-    protected float xrot;
-    protected float yrot;
-    protected float zrot;
+    private boolean third_p_render;
+    private float x;
+    private float y;
+    private float z;
+    private float xrot;
+    private float yrot;
+    private float zrot;
 
     public RenderInfoCapabilityPacket() {}
 
-    public RenderInfoCapabilityPacket(double x, double y, double z, float xrot, float yrot, float zrot) {
+    public RenderInfoCapabilityPacket(boolean third_p_render,float x, float y, float z, float xrot, float yrot, float zrot) {
+        this.third_p_render = third_p_render;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -33,27 +35,30 @@ public class RenderInfoCapabilityPacket {
     }
 
     public RenderInfoCapabilityPacket(FriendlyByteBuf buf) {
-        this.x = buf.readDouble();
-        this.y = buf.readDouble();
-        this.z = buf.readDouble();
+        this.third_p_render = buf.readBoolean();
+        this.x = buf.readFloat();
+        this.y = buf.readFloat();
+        this.z = buf.readFloat();
         this.xrot = buf.readFloat();
         this.yrot = buf.readFloat();
         this.zrot = buf.readFloat();
     }
 
     public void encode(FriendlyByteBuf buf) {
-        buf.writeDouble(this.x);
-        buf.writeDouble(this.y);
-        buf.writeDouble(this.z);
+        buf.writeBoolean(this.third_p_render);
+        buf.writeFloat(this.x);
+        buf.writeFloat(this.y);
+        buf.writeFloat(this.z);
         buf.writeFloat(this.xrot);
         buf.writeFloat(this.yrot);
         buf.writeFloat(this.zrot);
     }
 
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
-        double X = this.x;
-        double Y = this.y;
-        double Z = this.z;
+        boolean ThirdPersonRender = this.third_p_render;
+        float X = this.x;
+        float Y = this.y;
+        float Z = this.z;
         float Xrot = this.xrot;
         float Yrot = this.yrot;
         float Zrot = this.zrot;
@@ -67,9 +72,9 @@ public class RenderInfoCapabilityPacket {
                 player.getCapability(XYZPosAndRotationProvider.PLAYER_BACK_WEAPON_XYZ).ifPresent(xyzPosAndRotation -> {
 
 
-                    xyzPosAndRotation.setXYZPosAndRotationDATA(X, Y, Z, Xrot, Yrot, Zrot);
-                    LOGGER.info("Server:"+ " " + X+ " " + Y+ " " + Z+ " " + Xrot+ " " + Yrot+ " " + Zrot);
-                    PacketChannel.sendToAllClients(new SyncRenderInfoCapabilityPacket(player.getUUID(),X, Y, Z, Xrot, Yrot, Zrot));
+                    xyzPosAndRotation.setXYZPosAndRotationDATA(ThirdPersonRender,X, Y, Z, Xrot, Yrot, Zrot);
+                    //LOGGER.info("Server: "+ " "+ ThirdPersonRender + X+ " " + Y+ " " + Z+ " " + Xrot+ " " + Yrot+ " " + Zrot);
+                    PacketChannel.sendToAllClients(new SyncRenderInfoCapabilityPacket(player.getUUID(),ThirdPersonRender,X, Y, Z, Xrot, Yrot, Zrot));
                 });
 
             }

@@ -18,6 +18,8 @@ import net.minecraft.world.item.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static com.kermitemperor.curiosbackslot.CuriosBackSlot.LOGGER;
 
 @OnlyIn(Dist.CLIENT)
@@ -57,9 +59,12 @@ public class BackWeaponRenderer extends RenderLayer<AbstractClientPlayer, Player
         ItemRenderer itemRenderer = mc.getItemRenderer();
         BakedModel model = itemRenderer.getItemModelShaper().getItemModel(stack);
 
+        AtomicBoolean should_third_person_render = new AtomicBoolean(false);
+
         livingEntity.getCapability(XYZPosAndRotationProvider.PLAYER_BACK_WEAPON_XYZ).ifPresent(xyzPosAndRotation -> {
-            LOGGER.info(livingEntity.getName().getContents() + " " + xyzPosAndRotation.getX() + " " + xyzPosAndRotation.getY());
+            //LOGGER.info(livingEntity.getName().getContents() + " " + xyzPosAndRotation.getX() + " " + xyzPosAndRotation.getY());
             matrixStack.translate(xyzPosAndRotation.getX(), xyzPosAndRotation.getY(), xyzPosAndRotation.getZ());
+            should_third_person_render.set(xyzPosAndRotation.isThirdPersonRender());
         });
 
 
@@ -85,7 +90,11 @@ public class BackWeaponRenderer extends RenderLayer<AbstractClientPlayer, Player
             itemRenderer.render(stack, ItemTransforms.TransformType.FIXED, true, matrixStack, bufferSource, packedLight, OverlayTexture.NO_OVERLAY, model);
         } else {
             if (hasArmor(livingEntity)) matrixStack.translate(0, 0 , 0.07d);
-            itemRenderer.render(stack, ItemTransforms.TransformType.FIXED, true, matrixStack, bufferSource, packedLight, OverlayTexture.NO_OVERLAY, model);
+            if (should_third_person_render.get()) {
+                itemRenderer.render(stack, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, true, matrixStack, bufferSource, packedLight, OverlayTexture.NO_OVERLAY, model);
+            } else {
+                itemRenderer.render(stack, ItemTransforms.TransformType.FIXED, true, matrixStack, bufferSource, packedLight, OverlayTexture.NO_OVERLAY, model);
+            }
         }
 
         matrixStack.popPose();

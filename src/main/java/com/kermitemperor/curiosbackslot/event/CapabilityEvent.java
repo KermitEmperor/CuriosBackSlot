@@ -32,7 +32,7 @@ public class CapabilityEvent {
             final XYZPosAndRotationProvider provider = new XYZPosAndRotationProvider();
 
             if (!existingCapability.isPresent()) {
-                LOGGER.info("attached, is Client: " + player.level.isClientSide());
+                //LOGGER.info("attached, is Client: " + player.level.isClientSide());
                 event.addCapability(new ResourceLocation(CuriosBackSlot.MOD_ID, "properties"), provider);
 
                 //This event is called twice, one on Server and on Client, we have to ask the server to

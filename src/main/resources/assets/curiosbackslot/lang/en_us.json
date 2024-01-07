@@ -2,5 +2,6 @@
   "curios.identifier.back_weapon": "Back Weapon §8§o(Press %s to quickswap in-game)",
   "key.category.curiosbackslot.main": "Curios Back Slot Keys",
   "key.curiosbackslot.switch": "Quick swap",
-  "key.curiosbackslot.XYZ": "Open/Close Back weapon customization screen"
+  "key.curiosbackslot.XYZ": "Open/Close Back weapon customization screen",
+  "backweaponconfigurationscreen.title": "Back Weapon Customization"
 }

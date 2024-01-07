@@ -22,7 +22,7 @@ public class XYZPosAndRotationProvider implements ICapabilityProvider, INBTSeria
         if (this.XYZPosAndRotationDATA == null) {
             this.XYZPosAndRotationDATA = new XYZPosAndRotation();
             this.XYZPosAndRotationDATA.set(new CompoundTag());
-            this.XYZPosAndRotationDATA.setXYZPosAndRotationDATA(0,0,0,0,0,0);
+            this.XYZPosAndRotationDATA.setXYZPosAndRotationDATA(false,0,0,0,0,0,0);
             LOGGER.info("created data");
         }
 
