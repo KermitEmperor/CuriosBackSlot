@@ -85,7 +85,7 @@ public class BackWeaponRenderer extends RenderLayer<AbstractClientPlayer, Player
         } else if (item instanceof BlockItem){
             matrixStack.mulPose(Vector3f.ZP.rotationDegrees(90f));
             matrixStack.mulPose(Vector3f.XN.rotationDegrees(180f));
-            matrixStack.translate(0,0.15,-0.2);
+            if (model.isGui3d()) matrixStack.translate(0,0.15,-0.2);
             if (hasArmor(livingEntity)) matrixStack.translate(0, 0 , -0.07d);
             itemRenderer.render(stack, ItemTransforms.TransformType.FIXED, true, matrixStack, bufferSource, packedLight, OverlayTexture.NO_OVERLAY, model);
         } else {
