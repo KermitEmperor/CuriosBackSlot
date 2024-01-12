@@ -3,5 +3,15 @@
   "key.category.curiosbackslot.main": "Curios Back Slot Keys",
   "key.curiosbackslot.switch": "Quick swap",
   "key.curiosbackslot.XYZ": "Open/Close Back weapon customization screen",
-  "backweaponconfigurationscreen.title": "Back Weapon Customization"
+  "backweaponconfigurationscreen.title": "Back Weapon Customization",
+  "backweaponconfigurationscreen.position": "Position",
+  "backweaponconfigurationscreen.rotation": "Rotation",
+  "backweaponconfigurationscreen.save": "Save/Refresh",
+  "backweaponconfigurationscreen.yes": "Yes",
+  "backweaponconfigurationscreen.no": "No",
+  "backweaponconfigurationscreen.sure": "Are you sure you want to quit?",
+  "backweaponconfigurationscreen.reset": "Reset",
+  "backweaponconfigurationscreen.cyclebutton.yes": "Use 3rd p render: §aYES",
+  "backweaponconfigurationscreen.cyclebutton.no": "Use 3rd p render: §cNO",
+  "backweaponconfigurationscreen.cyclebutton": "Missing translation 0"
 }

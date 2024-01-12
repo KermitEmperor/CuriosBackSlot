@@ -65,6 +65,9 @@ public class BackWeaponRenderer extends RenderLayer<AbstractClientPlayer, Player
             //LOGGER.info(livingEntity.getName().getContents() + " " + xyzPosAndRotation.getX() + " " + xyzPosAndRotation.getY());
             matrixStack.translate(xyzPosAndRotation.getX(), xyzPosAndRotation.getY(), xyzPosAndRotation.getZ());
             should_third_person_render.set(xyzPosAndRotation.isThirdPersonRender());
+            matrixStack.mulPose(Vector3f.XP.rotationDegrees(xyzPosAndRotation.getXrot()));
+            matrixStack.mulPose(Vector3f.YP.rotationDegrees(xyzPosAndRotation.getYrot()));
+            matrixStack.mulPose(Vector3f.ZP.rotationDegrees(xyzPosAndRotation.getZrot()));
         });
 
 
