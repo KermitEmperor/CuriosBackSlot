@@ -13,10 +13,10 @@ public class XYZPosAndRotation {
         this.XYZPosAndRotationDATA = tag;
     }
 
-    public void setXYZPosAndRotationDATA(boolean third_p_render, float x, float y, float z, float xrot, float yrot, float zrot) {
+    public void setXYZPosAndRotationDATA(boolean item_render, float x, float y, float z, float xrot, float yrot, float zrot) {
 
 
-        this.XYZPosAndRotationDATA.putBoolean("ThirdPersonRender", third_p_render);
+        this.XYZPosAndRotationDATA.putBoolean("itemRender", item_render);
         this.XYZPosAndRotationDATA.putFloat("X", x);
         this.XYZPosAndRotationDATA.putFloat("Y", y);
         this.XYZPosAndRotationDATA.putFloat("Z", z);
@@ -41,8 +41,8 @@ public class XYZPosAndRotation {
     }
 
 
-    public boolean isThirdPersonRender() {
-        return this.XYZPosAndRotationDATA.getBoolean("ThirdPersonRender");
+    public boolean isItemRender() {
+        return this.XYZPosAndRotationDATA.getBoolean("itemRender");
     }
 
     public float getX() {

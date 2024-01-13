@@ -31,7 +31,7 @@ public class ResyncWithMePacket {
                 player.getCapability(XYZPosAndRotationProvider.PLAYER_BACK_WEAPON_XYZ).ifPresent(xyzPosAndRotation -> {
                     PacketChannel.sendToAllClients(new SyncRenderInfoCapabilityPacket(
                             player.getUUID(),
-                            xyzPosAndRotation.isThirdPersonRender(),
+                            xyzPosAndRotation.isItemRender(),
                             xyzPosAndRotation.getX(),
                             xyzPosAndRotation.getY(),
                             xyzPosAndRotation.getZ(),

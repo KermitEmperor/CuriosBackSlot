@@ -22,6 +22,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
 
 @SuppressWarnings("FieldCanBeLocal") //please stop with the angry yellow
 public class BackWeaponConfigurationScreen extends Screen {
@@ -30,13 +33,13 @@ public class BackWeaponConfigurationScreen extends Screen {
     }
 
 
-    private boolean third_p_render;
+    private boolean item_render;
     private float x;
     private float y;
     private float z;
-    private float xrot;
-    private float yrot;
-    private float zrot;
+    private int xrot;
+    private int yrot;
+    private int zrot;
 
     private final int RED = 16733525;
     private final int GREEN = 5635925;
@@ -48,12 +51,15 @@ public class BackWeaponConfigurationScreen extends Screen {
     private Button noSave;
     private boolean added_ya_sure = false;
 
+    private static final DecimalFormat df = new DecimalFormat("0.0");
+
 
     //TODO make a usable stylish screen
     //TODO show what are the current values
 
     @Override
     public void init() {
+        df.setRoundingMode(RoundingMode.HALF_DOWN);
         mc = Minecraft.getInstance();
         LivingEntity player = mc.player;
 
@@ -67,10 +73,10 @@ public class BackWeaponConfigurationScreen extends Screen {
                 this.y = xyzPosAndRotation.getY();
                 this.z = xyzPosAndRotation.getZ();
 
-                this.xrot = xyzPosAndRotation.getXrot();
-                this.yrot = xyzPosAndRotation.getYrot();
-                this.zrot = xyzPosAndRotation.getZrot();
-                this.third_p_render = xyzPosAndRotation.isThirdPersonRender();
+                this.xrot = Mth.floor(xyzPosAndRotation.getXrot());
+                this.yrot = Mth.floor(xyzPosAndRotation.getYrot());
+                this.zrot = Mth.floor(xyzPosAndRotation.getZrot());
+                this.item_render = xyzPosAndRotation.isItemRender();
             });
         }
 
@@ -94,20 +100,20 @@ public class BackWeaponConfigurationScreen extends Screen {
 
         //rotation section
         //X
-        this.addRenderableWidget(rotationSection("+1.0", -26,-36, pButton -> this.xrot += 1));
-        this.addRenderableWidget(rotationSection("+0.1", 0,-36, pButton -> this.xrot += 0.1));
-        this.addRenderableWidget(rotationSection("-0.1", 26,-36, pButton -> this.xrot -= 0.1));
-        this.addRenderableWidget(rotationSection("-1.0", 52,-36, pButton -> this.xrot -= 1));
+        this.addRenderableWidget(rotationSection("+10", -26,-36, pButton -> this.xrot += 10));
+        this.addRenderableWidget(rotationSection("+1", 0,-36, pButton -> this.xrot += 1));
+        this.addRenderableWidget(rotationSection("-1", 26,-36, pButton -> this.xrot -= 1));
+        this.addRenderableWidget(rotationSection("-10", 52,-36, pButton -> this.xrot -= 10));
         //Y
-        this.addRenderableWidget(rotationSection("+1.0", -26,-14, pButton -> this.yrot += 1));
-        this.addRenderableWidget(rotationSection("+0.1", 0,-14, pButton -> this.yrot += 0.1));
-        this.addRenderableWidget(rotationSection("-0.1", 26,-14, pButton -> this.yrot -= 0.1));
-        this.addRenderableWidget(rotationSection("-1.0", 52,-14, pButton -> this.yrot -= 1));
+        this.addRenderableWidget(rotationSection("+10", -26,-14, pButton -> this.yrot += 10));
+        this.addRenderableWidget(rotationSection("+1", 0,-14, pButton -> this.yrot += 1));
+        this.addRenderableWidget(rotationSection("-1", 26,-14, pButton -> this.yrot -= 1));
+        this.addRenderableWidget(rotationSection("-10", 52,-14, pButton -> this.yrot -= 10));
         //z
-        this.addRenderableWidget(rotationSection("+1.0", -26,8, pButton -> this.zrot += 1));
-        this.addRenderableWidget(rotationSection("+0.1", 0,8, pButton -> this.zrot += 0.1));
-        this.addRenderableWidget(rotationSection("-0.1", 26,8, pButton -> this.zrot -= 0.1));
-        this.addRenderableWidget(rotationSection("-1.0", 52,8, pButton -> this.zrot -= 1));
+        this.addRenderableWidget(rotationSection("+10", -26,8, pButton -> this.zrot += 10));
+        this.addRenderableWidget(rotationSection("+1", 0,8, pButton -> this.zrot += 1));
+        this.addRenderableWidget(rotationSection("-1", 26,8, pButton -> this.zrot -= 1));
+        this.addRenderableWidget(rotationSection("-10", 52,8, pButton -> this.zrot -= 10));
 
         //Save Section
         this.addRenderableWidget(saveSection(new TranslatableComponent("backweaponconfigurationscreen.save"), 0,8,this.width/4, 20, pButton -> {
@@ -124,19 +130,19 @@ public class BackWeaponConfigurationScreen extends Screen {
             this.xrot = 0;
             this.yrot = 0;
             this.zrot = 0;
-            this.third_p_render = false;
+            this.item_render = false;
         }));
 
         this.addRenderableWidget(CycleButton.booleanBuilder(new TranslatableComponent("backweaponconfigurationscreen.cyclebutton.yes"), new TranslatableComponent("backweaponconfigurationscreen.cyclebutton.no"))
-            .withInitialValue(third_p_render)
+            .withInitialValue(item_render)
             .displayOnlyValue()
             .create(
                 this.width/4 - Mth.floor(this.width/4f / 2f),
-                this.height/4,
+                this.height/4 - 4,
                 this.width/4,
                 20,
                 new TranslatableComponent("backweaponconfigurationscreen.cyclebutton"), //Where even is this shown?
-                (pCycleButton, pValue) -> this.third_p_render = pValue
+                (pCycleButton, pValue) -> this.item_render = pValue
             )
         );
     }
@@ -186,14 +192,20 @@ public class BackWeaponConfigurationScreen extends Screen {
     }
 
     private void save() {
-        PacketChannel.sendToServer(new RenderInfoCapabilityPacket(this.third_p_render, this.x, this.y, this.z, this.xrot, this.yrot, this.zrot));
+        PacketChannel.sendToServer(new RenderInfoCapabilityPacket(this.item_render, this.x, this.y, this.z, this.xrot, this.yrot, this.zrot));
     }
 
     @Override
     public void render(@NotNull PoseStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
         int right_middle = Mth.floor(this.width * 0.75);
+        int left_middle = this.width / 4;
         int horizontal_upper_middle = this.height / 4;
+        int horizontal_middle = this.height / 2;
         int horizontal_lower_middle = Mth.floor(this.height * 0.75);
+
+        this.x = Float.parseFloat(df.format(this.x));
+        this.y = Float.parseFloat(df.format(this.y));
+        this.z = Float.parseFloat(df.format(this.z));
 
         this.renderBackground(pMatrixStack);
         LocalPlayer player = Minecraft.getInstance().player;
@@ -208,13 +220,28 @@ public class BackWeaponConfigurationScreen extends Screen {
         drawCenteredString(pMatrixStack, this.font, "Z:", right_middle-20, horizontal_upper_middle+24, BLUE);
 
         drawCenteredString(pMatrixStack, this.font, new TranslatableComponent("backweaponconfigurationscreen.rotation"), right_middle+37, horizontal_lower_middle-40, GRAY);
-        drawCenteredString(pMatrixStack, this.font, "X:", right_middle-20, horizontal_lower_middle-20, RED);
-        drawCenteredString(pMatrixStack, this.font, "Y:", right_middle-20, horizontal_lower_middle+2, GREEN);
-        drawCenteredString(pMatrixStack, this.font, "Z:", right_middle-20, horizontal_lower_middle+24, BLUE);
+        drawCenteredString(pMatrixStack, this.font, "Xrot:", right_middle-28, horizontal_lower_middle-20, RED);
+        drawCenteredString(pMatrixStack, this.font, "Yrot:", right_middle-28, horizontal_lower_middle+2, GREEN);
+        drawCenteredString(pMatrixStack, this.font, "Zrot:", right_middle-28, horizontal_lower_middle+24, BLUE);
 
         if (added_ya_sure) {
             drawCenteredString(pMatrixStack, this.font, new TranslatableComponent("backweaponconfigurationscreen.sure"), this.width / 2, this.height / 2 + 44, 16777215);
         }
+
+        drawCenteredString(pMatrixStack, this.font, "X:", left_middle / 2 + 4, horizontal_middle - 36 , RED);
+        drawCenteredString(pMatrixStack, this.font, "Y:", left_middle / 2 + 4, horizontal_middle - 20 , GREEN);
+        drawCenteredString(pMatrixStack, this.font, "Z:", left_middle / 2 + 4, horizontal_middle - 4 , BLUE);
+        drawCenteredString(pMatrixStack, this.font, "Xrot:", left_middle / 2 + 12, horizontal_middle + 12 , RED);
+        drawCenteredString(pMatrixStack, this.font, "Yrot:", left_middle / 2 + 12, horizontal_middle + 28 , GREEN);
+        drawCenteredString(pMatrixStack, this.font, "Zrot:", left_middle / 2 + 12, horizontal_middle + 44 , BLUE);
+
+        drawString(pMatrixStack, this.font, String.valueOf(this.x), left_middle / 2 + 4 + 6, horizontal_middle - 36 , GRAY);
+        drawString(pMatrixStack, this.font, String.valueOf(this.y), left_middle / 2 + 4 + 6, horizontal_middle - 20 , GRAY);
+        drawString(pMatrixStack, this.font, String.valueOf(this.z), left_middle / 2 + 4 + 6, horizontal_middle - 4 , GRAY);
+        drawString(pMatrixStack, this.font, this.xrot + "°", left_middle / 2 + 12 + 14, horizontal_middle + 12 , GRAY);
+        drawString(pMatrixStack, this.font, this.yrot + "°", left_middle / 2 + 12 + 14, horizontal_middle + 28 , GRAY);
+        drawString(pMatrixStack, this.font, this.zrot + "°", left_middle / 2 + 12 + 14, horizontal_middle + 44 , GRAY);
+
 
         super.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
     }
