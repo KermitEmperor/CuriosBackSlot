@@ -1,10 +1,7 @@
 package com.kermitemperor.curiosbackslot;
 
-import com.kermitemperor.curiosbackslot.capability.XYZPosAndRotation;
-import com.kermitemperor.curiosbackslot.client.BackWeaponConfigurationScreen;
 import com.kermitemperor.curiosbackslot.client.KeyBinding;
 import com.kermitemperor.curiosbackslot.config.ClientConfig;
-import com.kermitemperor.curiosbackslot.event.CapabilityEvent;
 import com.kermitemperor.curiosbackslot.network.PacketChannel;
 import com.kermitemperor.curiosbackslot.network.packet.SwitchPacket;
 import com.kermitemperor.curiosbackslot.render.GuiRenderer;
@@ -17,7 +14,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.gui.OverlayRegistry;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -47,13 +43,11 @@ public class CuriosBackSlot {
 
         IEventBus ModEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModEventBus.addListener(this::setup);
-        ModEventBus.addListener(this::enqueue);
         ModEventBus.addListener(this::clientSetup);
-        ModEventBus.addListener(this::onRegisterCapabilities);
+        ModEventBus.addListener(this::enqueue);
 
         IEventBus ForgeEventBus = MinecraftForge.EVENT_BUS;
         ForgeEventBus.register(this);
-        ForgeEventBus.register(new CapabilityEvent());
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ClientConfig.SPEC, MOD_ID + "-client.toml");
     }
@@ -65,7 +59,6 @@ public class CuriosBackSlot {
     private void clientSetup(final FMLClientSetupEvent event) {
         OverlayRegistry.registerOverlayTop(CuriosBackSlotHandler.SLOT_ID, new GuiRenderer());
         ClientRegistry.registerKeyBinding(KeyBinding.SWITCHING_KEY);
-        ClientRegistry.registerKeyBinding(KeyBinding.XYZ_KEY);
     }
 
     private void enqueue(final InterModEnqueueEvent evt) {
@@ -77,10 +70,6 @@ public class CuriosBackSlot {
                         .size(1)
                         .build()
         );
-    }
-
-    public void onRegisterCapabilities(final RegisterCapabilitiesEvent event) {
-        event.register(XYZPosAndRotation.class);
     }
 
     @SubscribeEvent
@@ -97,14 +86,6 @@ public class CuriosBackSlot {
 
         if (KeyBinding.SWITCHING_KEY.consumeClick()) {
             PacketChannel.sendToServer(new SwitchPacket());
-        } else if (KeyBinding.XYZ_KEY.consumeClick()) {
-            Minecraft.getInstance().pushGuiLayer(new BackWeaponConfigurationScreen());
-        }
-
-        // This shouldn't be implemented manually
-        if (mc.screen instanceof BackWeaponConfigurationScreen) {
-            mc.mouseHandler.releaseMouse();
         }
     }
-
 }
