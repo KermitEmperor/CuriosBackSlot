@@ -3,8 +3,6 @@ package com.kermitemperor.curiosbackslot.util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
@@ -16,22 +14,41 @@ public class CuriosBackSlotHandler {
 
     private static ICurioStacksHandler getCurioStackHandler(LivingEntity player) {
         ICuriosItemHandler curiosItemHandler = CuriosApi.getCuriosHelper().getCuriosHandler(player).orElseThrow(NullPointerException::new);
-        return curiosItemHandler.getStacksHandler(SLOT_ID).orElseThrow();
+        return curiosItemHandler.getStacksHandler(SLOT_ID).orElseThrow(NullPointerException::new);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    //TODO AVOID TRY CATCH AND DO A PROPER HANDLER OF ILLEGAL PLAYER ENTITIES
+
     public static ItemStack getStackInSlotClient() {
-        ICurioStacksHandler curioStacksHandler = getCurioStackHandler(mc.player);
-        return curioStacksHandler.getStacks().getStackInSlot(0);
+        ItemStack stack;
+        try {
+            ICurioStacksHandler curioStacksHandler = getCurioStackHandler(mc.player);
+            stack = curioStacksHandler.getStacks().getStackInSlot(0);
+        } catch (Exception e) {
+            stack = ItemStack.EMPTY;
+        }
+        return stack;
     }
 
     public static boolean renderItemInSlot(LivingEntity player) {
-        return getCurioStackHandler(player).getRenders().get(0);
+        boolean hide;
+        try {
+            hide = getCurioStackHandler(player).getRenders().get(0);
+        } catch (Exception e) {
+            hide = true;
+        }
+        return hide;
     }
 
     //FOR RENDER USE ONLY
     public static ItemStack getStackInSlot(LivingEntity player) {
-        return getCurioStackHandler(player).getStacks().getStackInSlot(0);
+        ItemStack stack;
+        try {
+            stack = getCurioStackHandler(player).getStacks().getStackInSlot(0);
+        } catch (Exception e) {
+            stack = ItemStack.EMPTY;
+        }
+        return stack;
     }
 
     //Must make an instance of this on serverside, otherwise null pointer exception will happen
