@@ -17,38 +17,33 @@ public class CuriosBackSlotHandler {
         return curiosItemHandler.getStacksHandler(SLOT_ID).orElseThrow(NullPointerException::new);
     }
 
-    //TODO AVOID TRY CATCH AND DO A PROPER HANDLER OF ILLEGAL PLAYER ENTITIES
+    //this looks cursed
+    private static ItemStack safelyGetCurioStack(LivingEntity player) {
+        try {
+            return getCurioStackHandler(player).getStacks().getStackInSlot(0);
+        } catch (Exception e) {
+            return ItemStack.EMPTY;
+        }
+    }
+
 
     public static ItemStack getStackInSlotClient() {
-        ItemStack stack;
-        try {
-            ICurioStacksHandler curioStacksHandler = getCurioStackHandler(mc.player);
-            stack = curioStacksHandler.getStacks().getStackInSlot(0);
-        } catch (Exception e) {
-            stack = ItemStack.EMPTY;
-        }
-        return stack;
+        return safelyGetCurioStack(mc.player);
     }
 
     public static boolean renderItemInSlot(LivingEntity player) {
-        boolean hide;
+        boolean show;
         try {
-            hide = getCurioStackHandler(player).getRenders().get(0);
+            show = getCurioStackHandler(player).getRenders().get(0);
         } catch (Exception e) {
-            hide = true;
+            show = false;
         }
-        return hide;
+        return show;
     }
 
     //FOR RENDER USE ONLY
     public static ItemStack getStackInSlot(LivingEntity player) {
-        ItemStack stack;
-        try {
-            stack = getCurioStackHandler(player).getStacks().getStackInSlot(0);
-        } catch (Exception e) {
-            stack = ItemStack.EMPTY;
-        }
-        return stack;
+        return safelyGetCurioStack(player);
     }
 
     //Must make an instance of this on serverside, otherwise null pointer exception will happen
@@ -70,6 +65,4 @@ public class CuriosBackSlotHandler {
             this.curioStacksHandler.getStacks().setStackInSlot(0, stack);
         }
     }
-
-
 }
