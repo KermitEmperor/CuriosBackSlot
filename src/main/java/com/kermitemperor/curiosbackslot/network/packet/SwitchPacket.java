@@ -24,7 +24,7 @@ public class SwitchPacket {
 
     }
 
-    public boolean handle(Supplier<NetworkEvent.Context> supplier) {
+    public void handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             LivingEntity player = context.getSender();
@@ -44,6 +44,5 @@ public class SwitchPacket {
             }
 
         });
-        return true;
     }
 }

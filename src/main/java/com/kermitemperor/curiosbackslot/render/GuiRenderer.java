@@ -11,18 +11,17 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.gui.ForgeIngameGui;
-import net.minecraftforge.client.gui.IIngameOverlay;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiRenderer implements IIngameOverlay {
+public class GuiRenderer implements IGuiOverlay {
 
     final Minecraft mc = Minecraft.getInstance();
 
     private static final ResourceLocation WIDGETS = new ResourceLocation("textures/gui/widgets.png");
 
-    @Override
-    public void render(ForgeIngameGui gui, PoseStack poseStack, float partialTick, int width, int height) {
+    public void render(ForgeGui gui, PoseStack poseStack, float partialTick, int width, int height) {
         if (mc.player == null) return;
         if (!(ClientConfig.SHOW.get())) return;
         if (mc.player.isDeadOrDying()) return;

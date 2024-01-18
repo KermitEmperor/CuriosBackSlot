@@ -28,7 +28,7 @@ public class PacketChannel {
         net.messageBuilder(SwitchPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .encoder(SwitchPacket::encode)
                 .decoder(SwitchPacket::new)
-                .consumer(SwitchPacket::handle)
+                .consumerMainThread(SwitchPacket::handle)
                 .add();
     }
 
