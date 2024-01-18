@@ -39,9 +39,11 @@ public class BackWeaponRenderer extends RenderLayer<AbstractClientPlayer, Player
 
 
         ItemStack stack = CuriosBackSlotHandler.getStackInSlot(livingEntity);
-        Item item = stack.getItem();
 
         if (stack.isEmpty()) return;
+
+        Item item = stack.getItem();
+
 
         matrixStack.pushPose();
 
