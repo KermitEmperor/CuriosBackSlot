@@ -167,8 +167,8 @@ dependencies {
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
     // The group id is ignored when searching -- in this case, it is "blank"
     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
-    implementation fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.4.4") {transitive = false}
-    implementation fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.4.4:api") {transitive = false}
+    implementation fg.deobf("top.theillusivec4.curios:curios-forge:1.19.4-5.1.5.4") {transitive = false}
+    implementation fg.deobf("top.theillusivec4.curios:curios-forge:1.19.4-5.1.5.4:api") {transitive = false}
 
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html

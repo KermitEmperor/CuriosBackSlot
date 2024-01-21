@@ -2,12 +2,11 @@ package com.kermitemperor.curiosbackslot.render;
 
 import com.kermitemperor.curiosbackslot.util.CuriosBackSlotHandler;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.*;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -52,7 +51,7 @@ public class BackWeaponRenderer extends RenderLayer<AbstractClientPlayer, Player
         playerModel.body.translateAndRotate(matrixStack);
         matrixStack.scale(1,1,1);
         matrixStack.translate(0, 0.35d, 0.16d);
-        matrixStack.mulPose(Vector3f.ZN.rotationDegrees(90f));
+        matrixStack.mulPose(Axis.ZN.rotationDegrees(90f));
 
 
         ItemRenderer itemRenderer = mc.getItemRenderer();
@@ -62,29 +61,29 @@ public class BackWeaponRenderer extends RenderLayer<AbstractClientPlayer, Player
         if (item instanceof TridentItem) {
             //matrixStack.mulPose(Vector3f.XN.rotationDegrees(90f));
             if (hasArmor(livingEntity)) matrixStack.translate(0, 0 , 0.03d);
-            matrixStack.mulPose(Vector3f.ZN.rotationDegrees(135f));
-            matrixStack.mulPose(Vector3f.YN.rotationDegrees(60f));
+            matrixStack.mulPose(Axis.ZN.rotationDegrees(135f));
+            matrixStack.mulPose(Axis.YN.rotationDegrees(60f));
             matrixStack.translate(0,0.2,-0.07);
-            itemRenderer.renderStatic(stack, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLight, OverlayTexture.NO_OVERLAY, matrixStack, bufferSource, livingEntity.getId());
+            itemRenderer.renderStatic(stack, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, packedLight, OverlayTexture.NO_OVERLAY, matrixStack, bufferSource, livingEntity.level, livingEntity.getId());
 
         } else if (item instanceof ShieldItem) {
-            matrixStack.mulPose(Vector3f.ZN.rotationDegrees(90f));
-            matrixStack.mulPose(Vector3f.YP.rotationDegrees(-90f));
+            matrixStack.mulPose(Axis.ZN.rotationDegrees(90f));
+            matrixStack.mulPose(Axis.YP.rotationDegrees(-90f));
             matrixStack.translate(-0.12, 0, -0.16);
             matrixStack.scale(0.65f, 0.65f, 0.65f);
             if (hasArmor(livingEntity)) matrixStack.translate(-0.01d, 0, 0);
-            itemRenderer.renderStatic(stack, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLight, OverlayTexture.NO_OVERLAY, matrixStack, bufferSource, livingEntity.getId());
+            itemRenderer.renderStatic(stack, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, packedLight, OverlayTexture.NO_OVERLAY, matrixStack, bufferSource, livingEntity.level, livingEntity.getId());
         } else if (item instanceof BlockItem){
-            matrixStack.mulPose(Vector3f.ZP.rotationDegrees(90f));
-            matrixStack.mulPose(Vector3f.XN.rotationDegrees(180f));
+            matrixStack.mulPose(Axis.ZP.rotationDegrees(90f));
+            matrixStack.mulPose(Axis.XN.rotationDegrees(180f));
             if (model.isGui3d()) matrixStack.translate(0,0.15,-0.2);
             if (hasArmor(livingEntity)) matrixStack.translate(0, 0 , -0.07d);
-            itemRenderer.renderStatic(stack, ItemTransforms.TransformType.FIXED, packedLight, OverlayTexture.NO_OVERLAY, matrixStack, bufferSource, livingEntity.getId());
+            itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, packedLight, OverlayTexture.NO_OVERLAY, matrixStack, bufferSource, livingEntity.level, livingEntity.getId());
         } else {
             if (hasArmor(livingEntity)) matrixStack.translate(0, 0 , 0.07d);
             matrixStack.translate(-0.027,-0.813,-0.44);
-            //itemRenderer.render(stack, ItemTransforms.TransformType.FIXED, true, matrixStack, bufferSource, packedLight, OverlayTexture.NO_OVERLAY, model);
-            itemRenderer.renderStatic(stack, ItemTransforms.TransformType.HEAD, packedLight, OverlayTexture.NO_OVERLAY, matrixStack, bufferSource, livingEntity.getId());
+            //renderStatic(ItemStack pStack, ItemDisplayContext pDisplayContext, int pCombinedLight, int pCombinedOverlay, PoseStack pPoseStack, MultiBufferSource pBuffer, @Nullable Level pLevel, int pSeed)
+            itemRenderer.renderStatic(stack, ItemDisplayContext.HEAD, packedLight, OverlayTexture.NO_OVERLAY, matrixStack, bufferSource, livingEntity.level, livingEntity.getId());
 
         }
 

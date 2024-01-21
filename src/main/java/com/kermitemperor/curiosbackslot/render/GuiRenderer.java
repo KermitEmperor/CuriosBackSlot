@@ -4,6 +4,7 @@ import com.kermitemperor.curiosbackslot.config.ClientConfig;
 import com.kermitemperor.curiosbackslot.util.CuriosBackSlotHandler;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -39,10 +40,10 @@ public class GuiRenderer {
         int xPos = screenWidth / 2 + 69 + ClientConfig.X_OFFSET.get();
         int yPos = screenHeight + ClientConfig.Y_OFFSET.get();
 
-        gui.blit(poseStack, xPos + 29, yPos - 23, 24, 22, 29, 24);
+        GuiComponent.blit(poseStack, xPos + 29, yPos - 23, 24, 22, 29, 24);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
-        mc.getItemRenderer().renderGuiItem(stack,xPos + 32, yPos - 19);
+        mc.getItemRenderer().renderGuiItem(poseStack,stack,xPos + 32, yPos - 19);
     });
 }
