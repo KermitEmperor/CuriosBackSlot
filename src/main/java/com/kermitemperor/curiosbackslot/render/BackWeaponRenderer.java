@@ -82,8 +82,9 @@ public class BackWeaponRenderer extends RenderLayer<AbstractClientPlayer, Player
             itemRenderer.renderStatic(stack, ItemTransforms.TransformType.FIXED, packedLight, OverlayTexture.NO_OVERLAY, matrixStack, bufferSource, livingEntity.getId());
         } else {
             if (hasArmor(livingEntity)) matrixStack.translate(0, 0 , 0.07d);
+            matrixStack.translate(-0.027,-0.813,-0.44);
             //itemRenderer.render(stack, ItemTransforms.TransformType.FIXED, true, matrixStack, bufferSource, packedLight, OverlayTexture.NO_OVERLAY, model);
-            itemRenderer.renderStatic(stack, ItemTransforms.TransformType.FIXED, packedLight, OverlayTexture.NO_OVERLAY, matrixStack, bufferSource, livingEntity.getId());
+            itemRenderer.renderStatic(stack, ItemTransforms.TransformType.HEAD, packedLight, OverlayTexture.NO_OVERLAY, matrixStack, bufferSource, livingEntity.getId());
 
         }
 
