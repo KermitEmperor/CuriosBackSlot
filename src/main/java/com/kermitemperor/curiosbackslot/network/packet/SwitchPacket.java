@@ -39,7 +39,7 @@ public class SwitchPacket {
                 player.setItemSlot(EquipmentSlot.MAINHAND, backStack);
                 backSlotHandler.setStackInSlot(handStack);
 
-                player.getLevel().playSound(null, player.blockPosition(), SoundEvents.ARMOR_EQUIP_ELYTRA, SoundSource.AMBIENT, 1, 1);
+                player.level().playSound(null, player.blockPosition(), SoundEvents.ARMOR_EQUIP_ELYTRA, SoundSource.AMBIENT, 1, 1);
 
             }
 

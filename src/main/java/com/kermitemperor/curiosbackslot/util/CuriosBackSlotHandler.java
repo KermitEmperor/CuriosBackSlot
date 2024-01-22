@@ -13,7 +13,7 @@ public class CuriosBackSlotHandler {
     public static final String SLOT_ID = "back_weapon";
 
     private static ICurioStacksHandler getCurioStackHandler(LivingEntity player) {
-        ICuriosItemHandler curiosItemHandler = CuriosApi.getCuriosHelper().getCuriosHandler(player).orElseThrow(NullPointerException::new);
+        ICuriosItemHandler curiosItemHandler = CuriosApi.getCuriosInventory(player).orElseThrow(NullPointerException::new);
         return curiosItemHandler.getStacksHandler(SLOT_ID).orElseThrow(NullPointerException::new);
     }
 
@@ -53,7 +53,7 @@ public class CuriosBackSlotHandler {
         private final ICurioStacksHandler curioStacksHandler;
 
         public ServerCuriosBackSlotHandler(LivingEntity player) {
-            ICuriosItemHandler curiosItemHandler = CuriosApi.getCuriosHelper().getCuriosHandler(player).orElseThrow(NullPointerException::new);
+            ICuriosItemHandler curiosItemHandler = CuriosApi.getCuriosInventory(player).orElseThrow(NullPointerException::new);
             this.curioStacksHandler = curiosItemHandler.getStacksHandler(SLOT_ID).orElseThrow();
         }
 

@@ -59,12 +59,11 @@ public class BackWeaponRenderer extends RenderLayer<AbstractClientPlayer, Player
 
 
         if (item instanceof TridentItem) {
-            //matrixStack.mulPose(Vector3f.XN.rotationDegrees(90f));
             if (hasArmor(livingEntity)) matrixStack.translate(0, 0 , 0.03d);
             matrixStack.mulPose(Axis.ZN.rotationDegrees(135f));
             matrixStack.mulPose(Axis.YN.rotationDegrees(60f));
             matrixStack.translate(0,0.2,-0.07);
-            itemRenderer.renderStatic(stack, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, packedLight, OverlayTexture.NO_OVERLAY, matrixStack, bufferSource, livingEntity.level, livingEntity.getId());
+            itemRenderer.renderStatic(stack, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, packedLight, OverlayTexture.NO_OVERLAY, matrixStack, bufferSource, livingEntity.level(), livingEntity.getId());
 
         } else if (item instanceof ShieldItem) {
             matrixStack.mulPose(Axis.ZN.rotationDegrees(90f));
@@ -72,18 +71,17 @@ public class BackWeaponRenderer extends RenderLayer<AbstractClientPlayer, Player
             matrixStack.translate(-0.12, 0, -0.16);
             matrixStack.scale(0.65f, 0.65f, 0.65f);
             if (hasArmor(livingEntity)) matrixStack.translate(-0.01d, 0, 0);
-            itemRenderer.renderStatic(stack, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, packedLight, OverlayTexture.NO_OVERLAY, matrixStack, bufferSource, livingEntity.level, livingEntity.getId());
+            itemRenderer.renderStatic(stack, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, packedLight, OverlayTexture.NO_OVERLAY, matrixStack, bufferSource, livingEntity.level(), livingEntity.getId());
         } else if (item instanceof BlockItem){
             matrixStack.mulPose(Axis.ZP.rotationDegrees(90f));
             matrixStack.mulPose(Axis.XN.rotationDegrees(180f));
             if (model.isGui3d()) matrixStack.translate(0,0.15,-0.2);
             if (hasArmor(livingEntity)) matrixStack.translate(0, 0 , -0.07d);
-            itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, packedLight, OverlayTexture.NO_OVERLAY, matrixStack, bufferSource, livingEntity.level, livingEntity.getId());
+            itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, packedLight, OverlayTexture.NO_OVERLAY, matrixStack, bufferSource, livingEntity.level(), livingEntity.getId());
         } else {
             if (hasArmor(livingEntity)) matrixStack.translate(0, 0 , 0.07d);
             matrixStack.translate(-0.027,-0.813,-0.44);
-            //renderStatic(ItemStack pStack, ItemDisplayContext pDisplayContext, int pCombinedLight, int pCombinedOverlay, PoseStack pPoseStack, MultiBufferSource pBuffer, @Nullable Level pLevel, int pSeed)
-            itemRenderer.renderStatic(stack, ItemDisplayContext.HEAD, packedLight, OverlayTexture.NO_OVERLAY, matrixStack, bufferSource, livingEntity.level, livingEntity.getId());
+            itemRenderer.renderStatic(stack, ItemDisplayContext.HEAD, packedLight, OverlayTexture.NO_OVERLAY, matrixStack, bufferSource, livingEntity.level(), livingEntity.getId());
 
         }
 

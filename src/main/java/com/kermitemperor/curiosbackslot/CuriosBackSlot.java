@@ -8,7 +8,6 @@ import com.kermitemperor.curiosbackslot.render.GuiRenderer;
 import com.kermitemperor.curiosbackslot.util.CuriosBackSlotHandler;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
@@ -18,16 +17,12 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.event.CurioEquipEvent;
 @Mod(CuriosBackSlot.MOD_ID)
 public class CuriosBackSlot {
@@ -38,10 +33,8 @@ public class CuriosBackSlot {
 
 
     public CuriosBackSlot() {
-
         IEventBus ModEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModEventBus.addListener(this::setup);
-        ModEventBus.addListener(this::enqueue);
         ModEventBus.addListener(this::onRegisterOverlay);
 
         IEventBus ForgeEventBus = MinecraftForge.EVENT_BUS;
@@ -54,21 +47,9 @@ public class CuriosBackSlot {
         PacketChannel.register();
     }
 
-    private void enqueue(final InterModEnqueueEvent evt) {
-        InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE,
-                () -> new SlotTypeMessage
-                        .Builder(CuriosBackSlotHandler.SLOT_ID)
-                        .icon(new ResourceLocation(CuriosApi.MODID,"slot/empty_"+CuriosBackSlotHandler.SLOT_ID+"_slot"))
-                        .priority(1)
-                        .size(1)
-                        .build()
-        );
-    }
-
     private void onRegisterOverlay(final RegisterGuiOverlaysEvent event) {
         event.registerAboveAll(CuriosBackSlotHandler.SLOT_ID + "_overlay", GuiRenderer.overlay);
     }
-
 
     @SubscribeEvent
     public void onRegisterKeys(RegisterKeyMappingsEvent event) {
