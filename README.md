@@ -8,8 +8,8 @@ Back Weapon Slot is a made on Forge. It requires [Curios API](https://www.cursef
 ### Tip
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/B0B6TMVJ8)
 
-### Datapacks
-Add items which can be worn on the back or belt via a datapack. To adjust the position and size of the rendered items, a resource pack is needed. Back Weapon Slot uses the head renderer which can be set or configured in the models folder and looks like this:
+### Resource Pack
+To adjust the position and size of the rendered items, a resource pack is needed. Back Weapon Slot uses the head renderer which can be set or configured in the models folder and looks like this:
 
 ```json
 "head": {
