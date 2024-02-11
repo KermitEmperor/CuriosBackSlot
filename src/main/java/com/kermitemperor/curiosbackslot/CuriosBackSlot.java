@@ -36,6 +36,7 @@ public class CuriosBackSlot {
         IEventBus ModEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModEventBus.addListener(this::setup);
         ModEventBus.addListener(this::onRegisterOverlay);
+        ModEventBus.addListener(this::onRegisterKeys);
 
         IEventBus ForgeEventBus = MinecraftForge.EVENT_BUS;
         ForgeEventBus.register(this);
@@ -51,8 +52,7 @@ public class CuriosBackSlot {
         event.registerAboveAll(CuriosBackSlotHandler.SLOT_ID + "_overlay", GuiRenderer.overlay);
     }
 
-    @SubscribeEvent
-    public void onRegisterKeys(RegisterKeyMappingsEvent event) {
+    private void onRegisterKeys(final RegisterKeyMappingsEvent event) {
         event.register(KeyBinding.SWITCHING_KEY);
     }
 
