@@ -36,13 +36,14 @@ public class CuriosBackSlot {
         IEventBus ModEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModEventBus.addListener(this::setup);
         ModEventBus.addListener(this::onRegisterOverlay);
-        ModEventBus.addListener(this::onRegisterKeys);
+
 
         IEventBus ForgeEventBus = MinecraftForge.EVENT_BUS;
         ForgeEventBus.register(this);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ClientConfig.SPEC, MOD_ID + "-client.toml");
     }
+
 
     private void setup(final FMLCommonSetupEvent event) {
         PacketChannel.register();
@@ -52,9 +53,6 @@ public class CuriosBackSlot {
         event.registerAboveAll(CuriosBackSlotHandler.SLOT_ID + "_overlay", GuiRenderer.overlay);
     }
 
-    private void onRegisterKeys(final RegisterKeyMappingsEvent event) {
-        event.register(KeyBinding.SWITCHING_KEY);
-    }
 
     @SubscribeEvent
     public void onEquip(CurioEquipEvent event) {
@@ -70,6 +68,14 @@ public class CuriosBackSlot {
 
         if (KeyBinding.SWITCHING_KEY.consumeClick()) {
             PacketChannel.sendToServer(new SwitchPacket());
+        }
+    }
+
+    @Mod.EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class ClientProxy {
+        @SubscribeEvent
+        public static void onRegisterKeys(final RegisterKeyMappingsEvent event) {
+            event.register(KeyBinding.SWITCHING_KEY);
         }
     }
 }
