@@ -70,10 +70,6 @@ public class CuriosBackSlot {
     }
 
 
-    @SubscribeEvent
-    public void onRegisterKeys(RegisterKeyMappingsEvent event) {
-        event.register(KeyBinding.SWITCHING_KEY);
-    }
 
     @SubscribeEvent
     public void onEquip(CurioEquipEvent event) {
@@ -89,6 +85,14 @@ public class CuriosBackSlot {
 
         if (KeyBinding.SWITCHING_KEY.consumeClick()) {
             PacketChannel.sendToServer(new SwitchPacket());
+        }
+    }
+
+    @Mod.EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class ClientProxy {
+        @SubscribeEvent
+        public static void onRegisterKeys(final RegisterKeyMappingsEvent event) {
+            event.register(KeyBinding.SWITCHING_KEY);
         }
     }
 }
