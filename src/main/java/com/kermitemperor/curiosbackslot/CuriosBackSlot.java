@@ -69,12 +69,6 @@ public class CuriosBackSlot {
         event.registerAboveAll(CuriosBackSlotHandler.SLOT_ID + "_overlay", GuiRenderer.overlay);
     }
 
-
-    @SubscribeEvent
-    public void onRegisterKeys(RegisterKeyMappingsEvent event) {
-        event.register(KeyBinding.SWITCHING_KEY);
-    }
-
     @SubscribeEvent
     public void onEquip(CurioEquipEvent event) {
         if (event.getSlotContext().identifier().equals(CuriosBackSlotHandler.SLOT_ID)) {
@@ -89,6 +83,14 @@ public class CuriosBackSlot {
 
         if (KeyBinding.SWITCHING_KEY.consumeClick()) {
             PacketChannel.sendToServer(new SwitchPacket());
+        }
+    }
+
+    @Mod.EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class ClientProxy {
+        @SubscribeEvent
+        public static void onRegisterKeys(final RegisterKeyMappingsEvent event) {
+            event.register(KeyBinding.SWITCHING_KEY);
         }
     }
 }
