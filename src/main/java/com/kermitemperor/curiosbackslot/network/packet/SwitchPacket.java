@@ -1,5 +1,6 @@
 package com.kermitemperor.curiosbackslot.network.packet;
 
+import com.kermitemperor.curiosbackslot.CuriosBackSlot;
 import com.kermitemperor.curiosbackslot.util.CuriosBackSlotHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.sounds.SoundEvents;
@@ -35,6 +36,7 @@ public class SwitchPacket {
                 ItemStack backStack = backSlotHandler.getStackInSlot();
 
                 if (backStack.isEmpty() && handStack.isEmpty()) return;
+                if (!CuriosBackSlot.canEquip(handStack)) return;
 
                 player.setItemSlot(EquipmentSlot.MAINHAND, backStack);
                 backSlotHandler.setStackInSlot(handStack);

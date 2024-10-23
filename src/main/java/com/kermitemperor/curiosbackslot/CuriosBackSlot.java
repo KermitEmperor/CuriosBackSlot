@@ -8,6 +8,7 @@ import com.kermitemperor.curiosbackslot.render.GuiRenderer;
 import com.kermitemperor.curiosbackslot.util.CuriosBackSlotHandler;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
@@ -23,7 +24,10 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
+import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.event.CurioEquipEvent;
+import java.util.Set;
+
 @Mod(CuriosBackSlot.MOD_ID)
 public class CuriosBackSlot {
 
@@ -53,10 +57,22 @@ public class CuriosBackSlot {
         event.registerAboveAll(CuriosBackSlotHandler.SLOT_ID + "_overlay", GuiRenderer.overlay);
     }
 
+    public static boolean canEquip(ItemStack itemStack) {
+        if (ClientConfig.DISALLOW_CURIO_ITEMS.get()) {
+            Set<String> validCurioSlots = CuriosApi.getItemStackSlots(itemStack).keySet();
+            return validCurioSlots.isEmpty() || validCurioSlots.contains(CuriosBackSlotHandler.SLOT_ID);
+        }
+        return true;
+    }
+
 
     @SubscribeEvent
     public void onEquip(CurioEquipEvent event) {
         if (event.getSlotContext().identifier().equals(CuriosBackSlotHandler.SLOT_ID)) {
+            if (!canEquip(event.getStack())) {
+                event.setResult(Event.Result.DENY);
+                return;
+            }
             event.setResult(Event.Result.ALLOW);
         }
     }
