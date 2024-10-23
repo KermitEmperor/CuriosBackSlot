@@ -9,6 +9,7 @@ import com.kermitemperor.curiosbackslot.util.CuriosBackSlotHandler;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.ClientRegistry;
@@ -30,6 +31,8 @@ import org.slf4j.Logger;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.event.CurioEquipEvent;
+
+import java.util.Set;
 
 @Mod(CuriosBackSlot.MOD_ID)
 public class CuriosBackSlot {
@@ -72,12 +75,25 @@ public class CuriosBackSlot {
         );
     }
 
+    public static boolean canEquip(Item item) {
+        if (ClientConfig.DISALLOW_CURIO_ITEMS.get()) {
+            Set<String> curioTags = CuriosApi.getCuriosHelper().getCurioTags(item);
+            return curioTags.isEmpty() || curioTags.contains(CuriosBackSlotHandler.SLOT_ID);
+        }
+        return true;
+    }
+
     @SubscribeEvent
     public void onEquip(CurioEquipEvent event) {
         if (event.getSlotContext().identifier().equals(CuriosBackSlotHandler.SLOT_ID)) {
+            if (!canEquip(event.getStack().getItem())) {
+                event.setResult(Event.Result.DENY);
+                return;
+            }
             event.setResult(Event.Result.ALLOW);
         }
     }
+
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
