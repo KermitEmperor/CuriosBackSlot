@@ -148,6 +148,9 @@ repositories {
     maven {
         url = "https://maven.theillusivec4.top/"
     }
+    maven {
+        url "https://cursemaven.com"
+    }
 }
 
 dependencies {
@@ -167,6 +170,7 @@ dependencies {
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
     // The group id is ignored when searching -- in this case, it is "blank"
     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
+    runtimeOnly fg.deobf("curse.maven:charm-of-undying-316873:4603643")
     implementation fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.4.4") {transitive = false}
     implementation fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.4.4:api") {transitive = false}
 

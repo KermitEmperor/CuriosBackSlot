@@ -11,6 +11,7 @@ public class ClientConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> Y_OFFSET;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> SHOW;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> DISALLOW_CURIO_ITEMS;
 
     static {
         BUILDER.push("Configs for Curios Back Weapon Slot");
@@ -26,7 +27,11 @@ public class ClientConfig {
 
         Y_OFFSET = BUILDER
                 .comment("Move the weapon back slot (the one that is near the hotbar) along the Y axis")
-                .define("Y_offset", 0);
+                .define("y_offset", 0);
+
+        DISALLOW_CURIO_ITEMS = BUILDER
+                .comment("Disallow items with designated curio slots to be placed in here")
+                .define("disallow_curio_items", true);
 
 
         BUILDER.pop();
